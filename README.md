@@ -1,11 +1,8 @@
-# Creative Theme for Jekyll
+# Your Accountant System
 
-A Jekyll implementation of the [Creative Theme](http://startbootstrap.com/template-overviews/creative/) template by [Start Bootstrap](http://startbootstrap.com).
+(https://ya-sy.github.io/Your-Accountant-System/)
 
-Creative is a one page Bootstrap theme for creatives, small businesses, and other multipurpose uses.
-The theme includes a number of rich features and plugins that you can use as a great boilerplate for your next Jekyll project! 
-
-See it live in action at <https://volny.github.io/creative-theme-jekyll/>
+Getting started with our software is effortless, thanks to our intuitive Setup Wizard. Whether you're setting up a new financial operation, managing transactions, or assigning user permissions, our step-by-step process ensures everything is configured quickly and accurately.
 
 ## To use the Creative Theme template in your project
 
