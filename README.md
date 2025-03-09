@@ -2,6 +2,14 @@
 
 (https://ya-sy.github.io/Your-Accountant-System/)
 
+- Custom Transaction Management – Record all transactions using custom models tailored to your needs.
+- User Role & Responsibility Control – Assign specific responsibilities and permissions to users to ensure smooth operations.
+- Custom Printable Invoices – Easily generate and customize invoices that suit your brand.
+- Secure User Communication – Connect with other users safely through a secure built-in messaging system.
+- Enterprise-Grade Security – Utilizing the latest Oracle security technology, your data remains safe and encrypted.
+- Financial Analysis & Reporting – Generate financial statements and reports with ease—no finance expertise required!
+- Friendly & Intuitive Interface – Designed for simplicity, making financial management effortless for
+
 Getting started with our software is effortless, thanks to our intuitive Setup Wizard. Whether you're setting up a new financial operation, managing transactions, or assigning user permissions, our step-by-step process ensures everything is configured quickly and accurately.
 
 Take Control of Your Finances – Download for Free!
