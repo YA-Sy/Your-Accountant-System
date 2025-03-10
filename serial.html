@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Encoder</title>
+    <title>Custom Base64 Encoder</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
 </head>
 <body>
 
-    <h2>Custom Text Encoder</h2>
+    <h2>Custom Base64 Encoder</h2>
     
     <input type="text" id="inputText" placeholder="Enter text here">
     <button onclick="encodeText()">Encode</button>
@@ -28,9 +28,14 @@
 
     <script>
         function customEncode(text) {
-            return text.split("").map(char => 
-                String.fromCharCode(char.charCodeAt(0) + 3)  // Shift characters
+            let base64Encoded = btoa(text); // Convert to Base64
+
+            // Custom modification: Shift each character by 2 ASCII codes
+            let customEncoded = base64Encoded.split("").map(char => 
+                String.fromCharCode(char.charCodeAt(0) + 2)
             ).join("");
+
+            return customEncoded;
         }
 
         function encodeText() {
