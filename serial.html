@@ -71,3 +71,76 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Encoding</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        input, button {
+            margin: 5px;
+            padding: 8px;
+            width: 300px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Secret Alphanumeric Encoder</h2>
+    
+    <div class="container">
+        <input type="text" id="inputText" placeholder="Enter text">
+        <button onclick="encodeText()">Encode</button>
+        <p id="outputText"></p>
+    </div>
+
+    <script>
+        function encodeText() {
+            let text = document.getElementById("inputText").value;
+            let encodedText = secretEncode(text);
+            document.getElementById("outputText").innerText = encodedText;
+        }
+
+        function secretEncode(text) {
+            let base64Encoded = btoa(text); // Step 1: Convert to Base64
+
+            // Step 2: Shift characters by a pattern
+            let shifted = base64Encoded.split("").map((char, index) => {
+                let ascii = char.charCodeAt(0);
+                
+                // Shift vowels forward, consonants backward
+                if ("AEIOUaeiou".includes(char)) {
+                    ascii += 3;
+                } else {
+                    ascii -= 1;
+                }
+
+                return String.fromCharCode(ascii);
+            }).join("");
+
+            // Step 3: Replace non-alphanumeric Base64 chars (+, /, =) with letters/numbers
+            let replaced = shifted.replace(/\+/g, "X")
+                                  .replace(/\//g, "Y")
+                                  .replace(/=/g, "Z");
+
+            // Step 4: Reorder sections (first half swapped with second half)
+            let mid = Math.floor(replaced.length / 2);
+            let finalEncoded = replaced.slice(mid) + replaced.slice(0, mid);
+
+            return finalEncoded;
+        }
+    </script>
+
+</body>
+</html>
