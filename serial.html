@@ -3,69 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serial Generator</title>
+    <title>Custom Base64 Encoder</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        input, button {
-            margin: 5px;
-            padding: 8px;
-            width: 300px;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        .container { width: 50%; margin: auto; }
+        input { display: block; width: 100%; margin-bottom: 10px; padding: 8px; font-size: 16px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h2>Please enter your Product ID</h2>
-    
     <div class="container">
-        <input type="text" id="inputText" placeholder="Enter text">
-        <button onclick="encodeText()">Generate</button>
-        <p id="outputText"></p>
+        <h2>Custom Encoding</h2>
+        <input type="text" id="field1" placeholder="Enter text 1">
+        <input type="text" id="field2" placeholder="Enter text 2">
+        <input type="text" id="field3" placeholder="Enter text 3">
+        <input type="text" id="field4" placeholder="Enter text 4">
+        <input type="text" id="field5" placeholder="Enter text 5">
+        <input type="text" id="field6" placeholder="Enter text 6">
+        <button onclick="encodeFields()">Encode</button>
+        <h3>Encoded Results</h3>
+        <textarea id="output" rows="8" style="width: 100%;" readonly></textarea>
     </div>
 
     <script>
-        function encodeText() {
-            let text = document.getElementById("inputText").value;
-            let encodedText = secretEncode(text);
-            document.getElementById("outputText").innerText = encodedText;
+        // Define unique encoding maps for each text field (no standard Base64)
+        const customEncodings = [
+            "7TQX9FZB41V6JMGNL5YWRADPCH238K0SEU",
+            "XWMQ71PBA3ZD6YJ5VF4RNGKTL9CH028SEU",
+            "9KLF7PA4BTQ8ZV61YJMGNWD3RC025HESU",
+            "JMG7RCZ9TFLQ8XW6YB41VP3D025HNAESU",
+            "PAB49TQFJMGNWD37V6Y12X9RCH05KLESU",
+            "XWQTB9LPA6ZJFY7MGVD341NR025KHESU"
+        ];
+
+        // Encoding function using the provided map
+        function customEncode(text, map) {
+            let binaryString = "";
+            for (let i = 0; i < text.length; i++) {
+                let bin = text.charCodeAt(i).toString(2).padStart(8, '0');
+                binaryString += bin;
+            }
+
+            let encodedText = "";
+            for (let i = 0; i < binaryString.length; i += 5) {
+                let chunk = binaryString.substring(i, i + 5);
+                let index = parseInt(chunk, 2) || 0; // Convert 5-bit chunk to decimal
+                encodedText += map[index % map.length]; // Map it using our custom encoding
+            }
+            return encodedText;
         }
 
-        function secretEncode(text) {
-            let base64Encoded = btoa(text); // Step 1: Convert to Base64
-
-            // Step 2: Shift characters by a pattern
-            let shifted = base64Encoded.split("").map((char, index) => {
-                let ascii = char.charCodeAt(0);
-                
-                // Shift vowels forward, consonants backward
-                if ("AEIOUaeiou".includes(char)) {
-                    ascii += 3;
-                } else {
-                    ascii -= 1;
-                }
-
-                return String.fromCharCode(ascii);
-            }).join("");
-
-            // Step 3: Replace non-alphanumeric Base64 chars (+, /, =) with letters/numbers
-            let replaced = shifted.replace(/\+/g, "X")
-                                  .replace(/\//g, "Y")
-                                  .replace(/=/g, "Z");
-
-            // Step 4: Reorder sections (first half swapped with second half)
-            let mid = Math.floor(replaced.length / 2);
-            let finalEncoded = replaced.slice(mid) + replaced.slice(0, mid);
-
-            return finalEncoded;
+        // Function to encode all text fields
+        function encodeFields() {
+            let outputText = "";
+            for (let i = 1; i <= 6; i++) {
+                let inputText = document.getElementById("field" + i).value;
+                let encodedText = customEncode(inputText, customEncodings[i - 1]);
+                outputText += `Encoded ${i}: ${encodedText}\n`;
+            }
+            document.getElementById("output").value = outputText;
         }
     </script>
 
