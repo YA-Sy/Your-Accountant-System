@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Encoder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Custom Text Encoder</h2>
+    
+    <input type="text" id="inputText" placeholder="Enter text here">
+    <button onclick="encodeText()">Encode</button>
+    
+    <h3>Encoded Text:</h3>
+    <p id="outputText"></p>
+
+    <script>
+        function customEncode(text) {
+            return text.split("").map(char => 
+                String.fromCharCode(char.charCodeAt(0) + 3)  // Shift characters
+            ).join("");
+        }
+
+        function encodeText() {
+            let text = document.getElementById("inputText").value;
+            let encodedText = customEncode(text);
+            document.getElementById("outputText").innerText = encodedText;
+        }
+    </script>
+
+</body>
+</html>
