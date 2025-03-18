@@ -22,16 +22,16 @@
         import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
         // Firebase Config (Replace with yours)
-const firebaseConfig = {
-  apiKey: "AIzaSyDh_Rvo5T8_CbK7KQs0G7rK_16uXhavyKo",
-  authDomain: "yasy-2ed24.firebaseapp.com",
-  databaseURL: "https://yasy-2ed24-default-rtdb.firebaseio.com",
-  projectId: "yasy-2ed24",
-  storageBucket: "yasy-2ed24.firebasestorage.app",
-  messagingSenderId: "1023811009920",
-  appId: "1:1023811009920:web:9a18d07e18ab97fb545565",
-  measurementId: "G-NRDKG0SLYJ"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyDh_Rvo5T8_CbK7KQs0G7rK_16uXhavyKo",
+            authDomain: "yasy-2ed24.firebaseapp.com",
+            databaseURL: "https://yasy-2ed24-default-rtdb.firebaseio.com",
+            projectId: "yasy-2ed24",
+            storageBucket: "yasy-2ed24.firebasestorage.app",
+            messagingSenderId: "1023811009920",
+            appId: "1:1023811009920:web:9a18d07e18ab97fb545565",
+            measurementId: "G-NRDKG0SLYJ"
+        };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -39,15 +39,27 @@ const firebaseConfig = {
 
         // Function to Add Data
         window.addData = function (name = "Guest", age = 18) {
+            if (!name.trim()) return; // Prevent empty names
+
             const userRef = push(ref(db, "users"));
             set(userRef, { name, age })
                 .then(() => console.log("Data Added:", name, age))
                 .catch(error => console.error("Error:", error));
         };
 
-        // Automatically Insert Data on Page Load
+        // Function to Get URL Parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Automatically Insert Data on Page Load (if name is in URL)
         document.addEventListener("DOMContentLoaded", () => {
-            addData("AutoUser", Math.floor(Math.random() * 50) + 10); // Random age between 10-60
+            const nameFromUrl = getQueryParam("name");
+            if (nameFromUrl) {
+                const randomAge = Math.floor(Math.random() * 50) + 10; // Random age between 10-60
+                addData(nameFromUrl, randomAge);
+            }
         });
 
         // Function to Fetch Data
