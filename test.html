@@ -3,35 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Data</title>
+    <title>Firebase Public DB</title>
 </head>
 <body>
 
-    <h1>Firebase Data Input</h1>
+    <h1>Insert Data into Firebase</h1>
 
     <input type="text" id="name" placeholder="Enter Name">
     <input type="number" id="age" placeholder="Enter Age">
     <button onclick="addData()">Add Data</button>
 
-    <h2>Users:</h2>
+    <h2>Users List:</h2>
     <ul id="userList"></ul>
 
     <script type="module">
-        // Import Firebase
+        // Import Firebase SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
         import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
-        // Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDh_Rvo5T8_CbK7KQs0G7rK_16uXhavyKo",
-    authDomain: "yasy-2ed24.firebaseapp.com",
-    databaseURL: "https://yasy-2ed24-default-rtdb.firebaseio.com",
-    projectId: "yasy-2ed24",
-    storageBucket: "yasy-2ed24.firebasestorage.app",
-    messagingSenderId: "1023811009920",
-    appId: "1:1023811009920:web:9a18d07e18ab97fb545565",
-    measurementId: "G-NRDKG0SLYJ"
-  };
+        // Firebase Config (Replace with yours)
+const firebaseConfig = {
+  apiKey: "AIzaSyDh_Rvo5T8_CbK7KQs0G7rK_16uXhavyKo",
+  authDomain: "yasy-2ed24.firebaseapp.com",
+  databaseURL: "https://yasy-2ed24-default-rtdb.firebaseio.com",
+  projectId: "yasy-2ed24",
+  storageBucket: "yasy-2ed24.firebasestorage.app",
+  messagingSenderId: "1023811009920",
+  appId: "1:1023811009920:web:9a18d07e18ab97fb545565",
+  measurementId: "G-NRDKG0SLYJ"
+};
+
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
@@ -42,14 +43,19 @@
             const age = document.getElementById("age").value;
 
             if (name && age) {
-                const userRef = push(ref(db, "users"));
-                set(userRef, { name, age });
+                const userRef = push(ref(db, "users")); // Generate unique key
+                set(userRef, { name, age })
+                    .then(() => alert("Data Added!"))
+                    .catch(error => console.error("Error:", error));
+
                 document.getElementById("name").value = "";
                 document.getElementById("age").value = "";
+            } else {
+                alert("Please enter name and age.");
             }
         }
 
-        // Function to Get Data
+        // Function to Fetch Data
         const userList = document.getElementById("userList");
         onValue(ref(db, "users"), (snapshot) => {
             userList.innerHTML = "";
