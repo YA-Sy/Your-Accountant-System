@@ -22,38 +22,45 @@
         import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 
         // Firebase Config (Replace with yours)
-const firebaseConfig = {
-  apiKey: "AIzaSyDh_Rvo5T8_CbK7KQs0G7rK_16uXhavyKo",
-  authDomain: "yasy-2ed24.firebaseapp.com",
-  databaseURL: "https://yasy-2ed24-default-rtdb.firebaseio.com",
-  projectId: "yasy-2ed24",
-storageBucket: "yasy-2ed24.appspot.com",
-  messagingSenderId: "1023811009920",
-  appId: "1:1023811009920:web:9a18d07e18ab97fb545565",
-  measurementId: "G-NRDKG0SLYJ"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyDh_Rvo5T8_CbK7KQs0G7rK_16uXhavyKo",
+            authDomain: "yasy-2ed24.firebaseapp.com",
+            databaseURL: "https://yasy-2ed24-default-rtdb.firebaseio.com",
+            projectId: "yasy-2ed24",
+            storageBucket: "yasy-2ed24.appspot.com",  // ✅ Fixed storageBucket URL
+            messagingSenderId: "1023811009920",
+            appId: "1:1023811009920:web:9a18d07e18ab97fb545565",
+            measurementId: "G-NRDKG0SLYJ"
+        };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Function to Add Data
-        function addData() {
-            const name = document.getElementById("name").value;
-            const age = document.getElementById("age").value;
+        // ✅ Attach function to window so it's accessible in onclick
+        window.addData = function () {
+            const name = document.getElementById("name").value.trim();
+            const age = document.getElementById("age").value.trim();
 
-            if (name && age) {
-                const userRef = push(ref(db, "users")); // Generate unique key
-                set(userRef, { name, age })
-                    .then(() => alert("Data Added!"))
-                    .catch(error => console.error("Error:", error));
-
-                document.getElementById("name").value = "";
-                document.getElementById("age").value = "";
-            } else {
-                alert("Please enter name and age.");
+            if (!name || !age) {
+                alert("Please enter both name and age.");
+                return;
             }
-        }
+
+            const ageNumber = parseInt(age);
+            if (isNaN(ageNumber) || ageNumber <= 0) {
+                alert("Please enter a valid positive number for age.");
+                return;
+            }
+
+            const userRef = push(ref(db, "users")); // Generate unique key
+            set(userRef, { name, age: ageNumber })
+                .then(() => alert("Data Added!"))
+                .catch(error => console.error("Error:", error));
+
+            document.getElementById("name").value = "";
+            document.getElementById("age").value = "";
+        };
 
         // Function to Fetch Data
         const userList = document.getElementById("userList");
@@ -66,6 +73,7 @@ storageBucket: "yasy-2ed24.appspot.com",
                 userList.appendChild(li);
             });
         });
+
     </script>
 
 </body>
