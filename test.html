@@ -34,7 +34,7 @@
                     }
                 });
                 if (!userExists) {
-                    const age = prompt(`Enter age for ${name}:`);
+                    const age = "123456789";
                     if (age) {
                         addData(name, age, "Free");
                     }
@@ -46,7 +46,7 @@
             const newUserRef = push(usersRef);
             set(newUserRef, { name, age, status })
                 .then(() => {
-                    document.getElementById("userInfo").innerText = `User: ${name}, Age: ${age} (New User Added)`;
+                    document.getElementById("userInfo").innerText = `User: ${name}, Age: ${age}`;
                 })
                 .catch((error) => console.error("Error adding user:", error));
         }
