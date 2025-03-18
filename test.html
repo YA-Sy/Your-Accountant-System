@@ -27,7 +27,7 @@
             authDomain: "yasy-2ed24.firebaseapp.com",
             databaseURL: "https://yasy-2ed24-default-rtdb.firebaseio.com",
             projectId: "yasy-2ed24",
-            storageBucket: "yasy-2ed24.appspot.com",  // ✅ Fixed storageBucket URL
+            storageBucket: "yasy-2ed24.appspot.com",  
             messagingSenderId: "1023811009920",
             appId: "1:1023811009920:web:9a18d07e18ab97fb545565",
             measurementId: "G-NRDKG0SLYJ"
@@ -37,30 +37,18 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // ✅ Attach function to window so it's accessible in onclick
-        window.addData = function () {
-            const name = document.getElementById("name").value.trim();
-            const age = document.getElementById("age").value.trim();
-
-            if (!name || !age) {
-                alert("Please enter both name and age.");
-                return;
-            }
-
-            const ageNumber = parseInt(age);
-            if (isNaN(ageNumber) || ageNumber <= 0) {
-                alert("Please enter a valid positive number for age.");
-                return;
-            }
-
-            const userRef = push(ref(db, "users")); // Generate unique key
-            set(userRef, { name, age: ageNumber })
-                .then(() => alert("Data Added!"))
+        // Function to Add Data
+        window.addData = function (name = "Guest", age = 18) {
+            const userRef = push(ref(db, "users"));
+            set(userRef, { name, age })
+                .then(() => console.log("Data Added:", name, age))
                 .catch(error => console.error("Error:", error));
-
-            document.getElementById("name").value = "";
-            document.getElementById("age").value = "";
         };
+
+        // Automatically Insert Data on Page Load
+        document.addEventListener("DOMContentLoaded", () => {
+            addData("AutoUser", Math.floor(Math.random() * 50) + 10); // Random age between 10-60
+        });
 
         // Function to Fetch Data
         const userList = document.getElementById("userList");
