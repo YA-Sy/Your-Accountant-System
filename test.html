@@ -53,16 +53,40 @@
             return urlParams.get(param);
         }
 
-        // Automatically Insert Data on Page Load (if name is in URL)
+        // Function to Check if User Exists, Get Age, or Add Them
+        function checkAndAddUser(name) {
+            if (!name.trim()) return;
+
+            const usersRef = ref(db, "users");
+
+            // Fetch users and check if the name exists
+            onValue(usersRef, (snapshot) => {
+                let userExists = false;
+                snapshot.forEach((childSnapshot) => {
+                    const user = childSnapshot.val();
+                    if (user.name.toLowerCase() === name.toLowerCase()) { // Case-insensitive check
+                        userExists = true;
+                        alert(`${name} already exists with age: ${user.age}`);
+                    }
+                });
+
+                // If user not found, add them with a random age
+                if (!userExists) {
+                    const randomAge = Math.floor(Math.random() * 50) + 10; // Random age between 10-60
+                    addData(name, randomAge);
+                }
+            }, { onlyOnce: true }); // Fetch data once to prevent multiple executions
+        }
+
+        // Automatically check and insert data if name is in URL
         document.addEventListener("DOMContentLoaded", () => {
             const nameFromUrl = getQueryParam("name");
             if (nameFromUrl) {
-                const randomAge = Math.floor(Math.random() * 50) + 10; // Random age between 10-60
-                addData(nameFromUrl, randomAge);
+                checkAndAddUser(nameFromUrl);
             }
         });
 
-        // Function to Fetch Data
+        // Function to Fetch and Display Users
         const userList = document.getElementById("userList");
         onValue(ref(db, "users"), (snapshot) => {
             userList.innerHTML = "";
