@@ -4,7 +4,7 @@
     <div id="userInfo">Searching...</div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+        import { getDatabase, ref, push, set, onValue, off } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
         const firebaseConfig = {
             apiKey: "AIzaSyDh_Rvo5T8_CbK7KQs0G7rK_16uXhavyKo",
             authDomain: "yasy-2ed24.firebaseapp.com",
@@ -24,7 +24,7 @@
         function checkAndAddUser(name) {
             if (!name.trim()) return;
             const usersRef = ref(db, "users");
-            onValue(usersRef, (snapshot) => {
+            const callback = (snapshot) => {
                 let userExists = false;
                 snapshot.forEach((childSnapshot) => {
                     const user = childSnapshot.val();
@@ -35,11 +35,11 @@
                 });
                 if (!userExists) {
                     const age = "123456789";
-                    if (age) {
-                        addData(name, age, "Free");
-                    }
+                    addData(name, age, "Free");
                 }
-            }, { onlyOnce: true });
+                off(usersRef, "value", callback);
+            };
+            onValue(usersRef, callback, { onlyOnce: true });
         }
         function addData(name, age, status) {
             const usersRef = ref(db, "users");
